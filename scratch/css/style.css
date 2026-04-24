@@ -93,18 +93,14 @@ html {
     width: 80%;
     border-radius: 8px;
     border: none;
-    padding-top: 20px;
+    padding: 10px;
     height: 30%;
     display: flex;
     align-items: center;
     align-content: center;
     line-height: 100%;
-}
-
-.wordEntry {
-    height: 80%;
+    margin: 10px;
     font-size: large;
-    margin-top: 10px;
 }
 
 #game-over-div {

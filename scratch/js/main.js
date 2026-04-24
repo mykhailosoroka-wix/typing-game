@@ -1,6 +1,6 @@
 const settingsLocation = "data/settings.json";
 const wordsLocation = "data/wordlist.json";
-let settings = getSettings("medium")
+let settings = getSettings("easy")
 let currentWord = getWord();
 
 let timer, wordEntry, gameOver, score;
@@ -11,13 +11,19 @@ let restartButton = document.getElementById('restart-button');
 restartButton.addEventListener('click', () => {
     document.querySelector("#game-container").hidden = false;
     document.querySelector("#game-over-div").hidden = true;
+    document.querySelector("#difficulty").selectedIndex =0;
 
-    settings = getSettings("medium")
+    settings = getSettings("easy")
     currentWord = getWord();
 
     ({ timer, wordEntry, gameOver, score } = initComponents(timer, wordEntry, gameOver, score));
 
     correctCount = 0;
+})
+
+const difficultyDropdown = document.getElementById('difficulty');
+difficultyDropdown.addEventListener('change', (event) => {
+    onDifficultyChange(event.target.value);
 })
 
 function initComponents(timer, wordEntry, gameOver, score) {
@@ -74,11 +80,6 @@ function getWord(idx=-1) {
     return words[idx]
 }
 
-const difficultyDropdown = document.getElementById('difficulty');
-difficultyDropdown.addEventListener('change', (event) => {
-    onDifficultyChange(event.target.value);
-})
-
 function onCorrect() {
     timer.increment();
     correctCount += 1;
@@ -88,18 +89,11 @@ function onCorrect() {
 
 function onFinish() {
     wordEntry.finish();
-    // timer.finish()
     gameOver.finish(correctCount);
     document.querySelector("#game-container").hidden = true;
-    // const newEl = document.querySelector("#game-over-div")
 }
 
 function onDifficultyChange(difficulty) {
     settings = getSettings(difficulty);
     timer.updateIncremental(settings.timeAdded)
 }
-
-// const container = document.getElementById('game-container');
-//
-// container.appendChild(timer.element);
-// container.appendChild(wordEntry.element);
