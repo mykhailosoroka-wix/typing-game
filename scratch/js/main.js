@@ -3,28 +3,9 @@ const wordsLocation = "data/wordlist.json";
 let settings = getSettings("medium")
 let currentWord = getWord();
 
-let timer = new Timer(
-    document.getElementById('timer'),
-    settings.startTime,
-    settings.timeAdded,
-    onFinish
-);
-let wordEntry = new WordEntry(
-    document.getElementById('typer-container'),
-    document.getElementById('target-word'),
-    document.getElementById('input-word'),
-    currentWord,
-    onCorrect
-);
-let gameOver = new GameOver(
-    document.getElementById('game-over-div'),
-    document.getElementById('game-over-score'),
-);
-let score = new Score(
-    document.getElementById('score'),
-)
-
-let correct = 0;
+let timer, wordEntry, gameOver, score;
+({ timer, wordEntry, gameOver, score } = initComponents(timer, wordEntry, gameOver, score));
+let correctCount = 0;
 
 let restartButton = document.getElementById('restart-button');
 restartButton.addEventListener('click', () => {
@@ -34,6 +15,12 @@ restartButton.addEventListener('click', () => {
     settings = getSettings("medium")
     currentWord = getWord();
 
+    ({ timer, wordEntry, gameOver, score } = initComponents(timer, wordEntry, gameOver, score));
+
+    correctCount = 0;
+})
+
+function initComponents(timer, wordEntry, gameOver, score) {
     timer = new Timer(
         document.getElementById('timer'),
         settings.startTime,
@@ -55,8 +42,8 @@ restartButton.addEventListener('click', () => {
         document.getElementById('score'),
     )
 
-    correct = 0;
-})
+    return { timer, wordEntry, gameOver, score }
+}
 
 function loadText(path) {
     const xhr = new XMLHttpRequest();
@@ -94,15 +81,15 @@ difficultyDropdown.addEventListener('change', (event) => {
 
 function onCorrect() {
     timer.increment();
-    correct += 1;
-    score.update(correct);
+    correctCount += 1;
+    score.update(correctCount);
     return getWord();
 }
 
 function onFinish() {
     wordEntry.finish();
     // timer.finish()
-    gameOver.finish(correct)
+    gameOver.finish(correctCount);
     document.querySelector("#game-container").hidden = true;
     // const newEl = document.querySelector("#game-over-div")
 }
