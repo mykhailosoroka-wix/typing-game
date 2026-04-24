@@ -1,0 +1,18 @@
+{
+  "start_time": 5,
+
+  "difficulty_settings": [
+    {
+      "difficulty": "easy",
+      "time_added": 4
+    },
+    {
+      "difficulty": "medium",
+      "time_added": 2
+    },
+    {
+      "difficulty": "hard",
+      "time_added": 1
+    }
+  ]
+}
