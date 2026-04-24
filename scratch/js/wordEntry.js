@@ -17,6 +17,8 @@ class WordEntry {
         this.#displayEl = display;
         this.#displayEl.classList.add("wordEntry");
         this.#displayEl.disabled = false;
+        this.#displayEl.focus();
+        this.#displayEl.addEventListener('blur', () => this.#displayEl.focus());
         this.#displayEl.addEventListener('input', (e) => {
             if(this.isActive) {
                 this.#contents = e.target.value;
