@@ -5,14 +5,14 @@ import type GameSettings from "./GameSettings.ts";
 import WordEntry from "./WordEntry.tsx";
 import Timer from "./Timer.tsx";
 import GameOver from "./GameOver.tsx";
+import settingsData from "./data/settings.json";
+import words from "./data/wordlist.json";
 
 function App() {
-  const settingsLocation = "data/settings.json";
-  const wordsLocation = "data/wordlist.json";
-  let currentWord = getWord(wordsLocation);
+  let currentWord = getWord();
 
   // const [count, setCount] = useState(0)
-  const [settings, setSettings] = useState(getSettings("easy", settingsLocation));
+  const [settings, setSettings] = useState(getSettings("easy"));
   const [time, setTime] = useState(settings.startTime);
   const [state, setState] = useState(new GameState(currentWord, settings));
   const [resetKey, setResetKey] = useState(0);
@@ -20,7 +20,7 @@ function App() {
 
   function onCorrect() {
     setTime(time => time + settings.timeAdded);
-    setState(prev => ({ ...prev, score: prev.score + 1, currentWord: getWord(wordsLocation) }));
+    setState(prev => ({ ...prev, score: prev.score + 1, currentWord: getWord() }));
   }
 
   function resetGame() {
@@ -29,12 +29,12 @@ function App() {
     setResetKey(k => k + 1);
   }
 
+  // TODO: Remove the settings state
   return (
       <>
         <div className="difficulty-bar">
           <p className="difficulty-label">Difficulty</p>
-          // TODO: Remove the settings state
-          <select className="difficulty" defaultValue="easy" onChange={(e) => setSettings(getSettings(e.target.value, settingsLocation))}>
+          <select className="difficulty" defaultValue="easy" onChange={(e) => setSettings(getSettings(e.target.value))}>
             <option value="easy">Easy</option>
             <option value="medium">Medium</option>
             <option value="hard">Hard</option>
@@ -62,35 +62,24 @@ function App() {
   )
 }
 
-function getSettings(difficulty: string, settingsLocation: string): GameSettings {
-  const settingsContent = JSON.parse(loadText(settingsLocation));
-  const difficultySettings = settingsContent.difficulty_settings.find((item: { difficulty: string; }) => item.difficulty === difficulty);
+function getSettings(difficulty: string): GameSettings {
+  const difficultySettings = settingsData.difficulty_settings.find(item => item.difficulty === difficulty);
 
   return {
-    startTime: settingsContent.start_time,
-    timeAdded: difficultySettings.time_added
+    startTime: settingsData.start_time,
+    timeAdded: difficultySettings!.time_added
   };
 }
-
-function loadText(path: string) {
-  const xhr = new XMLHttpRequest();
-  xhr.open("GET", path, false);
-  xhr.send();
-  return xhr.responseText;
-}
-
-
 
 function getRandomInt(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function getWord(wordsLocation: string, idx=-1) {
-  const words = JSON.parse(loadText(wordsLocation));
+function getWord(idx = -1) {
   if (idx === -1) {
     idx = getRandomInt(0, words.length);
   }
-  return words[idx]
+  return words[idx];
 }
 
 export default App
