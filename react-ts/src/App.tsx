@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import {GameState} from "./GameState.ts";
-import type GameSettings from "./GameSettings.ts";
+import  GameSettings from "./GameSettings.ts";
 import WordEntry from "./WordEntry.tsx";
 import Timer from "./Timer.tsx";
 import GameOver from "./GameOver.tsx";
@@ -12,29 +12,31 @@ function App() {
   let currentWord = getWord();
 
   // const [count, setCount] = useState(0)
-  const [settings, setSettings] = useState(getSettings("easy"));
-  const [time, setTime] = useState(settings.startTime);
-  const [state, setState] = useState(new GameState(currentWord, settings));
+  const initialSettings = getSettings("easy");
+  const [time, setTime] = useState(initialSettings.startTime);
+  const [state, setState] = useState(new GameState(currentWord, initialSettings));
   const [resetKey, setResetKey] = useState(0);
 
 
   function onCorrect() {
-    setTime(time => time + settings.timeAdded);
+    setTime(time => time + state.gameSettings.timeAdded);
     setState(prev => ({ ...prev, score: prev.score + 1, currentWord: getWord() }));
   }
 
   function resetGame() {
-    setState(() => new GameState(currentWord, settings))
-    setTime(settings.startTime);
+    setState(() => new GameState(currentWord, initialSettings));
+    setTime(state.gameSettings.startTime);
     setResetKey(k => k + 1);
   }
 
-  // TODO: Remove the settings state
   return (
       <>
         <div className="difficulty-bar">
           <p className="difficulty-label">Difficulty</p>
-          <select className="difficulty" defaultValue="easy" onChange={(e) => setSettings(getSettings(e.target.value))}>
+          <select className="difficulty" defaultValue="easy" onChange={(e) => setState(prev => ({
+            ...prev,
+            gameSettings: getSettings(e.target.value)
+          }))}>
             <option value="easy">Easy</option>
             <option value="medium">Medium</option>
             <option value="hard">Hard</option>
