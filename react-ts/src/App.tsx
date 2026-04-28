@@ -33,7 +33,7 @@ function App() {
       <>
         <div className="difficulty-bar">
           <p className="difficulty-label">Difficulty</p>
-          <select className="difficulty" defaultValue="easy" onChange={(e) => setState(prev => ({
+          <select className="difficulty rounded" defaultValue="easy" onChange={(e) => setState(prev => ({
             ...prev,
             gameSettings: getSettings(e.target.value)
           }))}>
@@ -43,8 +43,8 @@ function App() {
           </select>
         </div>
 
-        <div className="game-container">
-          <div className="game-name">
+        <div className="game-container side-paddings screen-centered core-container rounded">
+          <div className="game-name rounded">
             <p>👩‍💻 Speed Typer 👨‍💻</p>
           </div>
           <div className="line">

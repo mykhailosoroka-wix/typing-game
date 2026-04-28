@@ -23,13 +23,13 @@ const WordEntry = ({state, onCorrect}: {state: GameState, onCorrect: () => void}
     }
 
     return (
-        <div className="typer-container">
+        <div className="typer-container rounded">
             <p className="type-label">Type the following:</p>
             <p className="target-word">{state.currentWord}</p>
             <input
                 ref={inputRef}
                 autoFocus={true}
-                className="input-word"
+                className="input-word rounded"
                 type="text"
                 placeholder="Type your word here..."
                 value={input}
