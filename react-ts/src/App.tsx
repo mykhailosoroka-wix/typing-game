@@ -33,7 +33,7 @@ function App() {
       <>
         <div className="difficulty-bar">
           <p className="difficulty-label">Difficulty</p>
-          <select className="difficulty rounded" defaultValue="easy" onChange={(e) => setState(prev => ({
+          <select key={resetKey} className="difficulty rounded" defaultValue="easy" onChange={(e) => setState(prev => ({
             ...prev,
             gameSettings: getSettings(e.target.value)
           }))}>
